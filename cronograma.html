@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cronograma IO</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #ffffff; 
+            color: #cdd6f4; 
+            display: flex; 
+            justify-content: center; 
+            padding: 40px; 
+            margin: 0;
+        }
+        .gantt-board { 
+            background-color: #ffffff; 
+            padding: 30px 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            width: 1000px; 
+        }
+        h2 { 
+            color: #060606; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            font-size: 24px;
+        }
+        .header, .task-row { 
+            display: grid; 
+            grid-template-columns: 220px repeat(9, 1fr) 200px; 
+            gap: 8px; 
+            align-items: center; 
+        }
+        .header { 
+            font-weight: bold; 
+            color: #0a0a0a; 
+            border-bottom: 2px solid #0a0a0a; 
+            padding-bottom: 10px; 
+            margin-bottom: 15px; 
+            font-size: 13px; 
+            text-align: center; 
+        }
+        .task-row { margin-bottom: 12px; }
+        .task-name { 
+            text-align: left; 
+            font-size: 14px; 
+            font-weight: 500; 
+            color: #0a0a0a;
+        }
+        .slot { 
+            background-color: #0a0a0a; 
+            height: 26px; 
+            border-radius: 6px; 
+        }
+        .active { 
+            background-color: #a6e3a1; 
+            box-shadow: 0 0 10px rgba(166, 227, 161, 0.4); 
+        }
+        .owner { 
+            text-align: left; 
+            font-size: 12px; 
+            color: #0a0a0a; 
+            padding-left: 15px; 
+        }
+        .footer-note {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <div class="gantt-board">
+        <h2>Cronograma de Desarrollo "IO" (1 Oct - 1 Dic)</h2>
+        
+        <div class="header">
+            <div style="text-align: left;">Fases del Proyecto</div>
+            <div>S1<br><span style="font-size:10px; font-weight:normal;">1-4 Oct</span></div>
+            <div>S2<br><span style="font-size:10px; font-weight:normal;">5-11 Oct</span></div>
+            <div>S3<br><span style="font-size:10px; font-weight:normal;">12-18 Oct</span></div>
+            <div>S4<br><span style="font-size:10px; font-weight:normal;">19-25 Oct</span></div>
+            <div>S5<br><span style="font-size:10px; font-weight:normal;">26 Oct-1 Nov</span></div>
+            <div>S6<br><span style="font-size:10px; font-weight:normal;">2-8 Nov</span></div>
+            <div>S7<br><span style="font-size:10px; font-weight:normal;">9-15 Nov</span></div>
+            <div>S8<br><span style="font-size:10px; font-weight:normal;">16-22 Nov</span></div>
+            <div>S9<br><span style="font-size:10px; font-weight:normal;">23-1 Dic</span></div>
+            <div style="text-align: left; padding-left: 15px;">Responsables</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">1. Arq. y BD SQL Server</div>
+            <div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="owner">Angel, Emiliano, Miguel</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">2. Autenticación JWT</div>
+            <div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="owner">Angel, Emiliano</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">3. Alta/Baja Equipos</div>
+            <div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="owner">Angel, Miguel</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">4. Búsqueda y Edición</div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="owner">Angel, Emiliano</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">5. Dashboard (Real-time)</div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="owner">Angel, Emiliano</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">6. Roles y Logs (Auditoría)</div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="owner">Emiliano, Miguel</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">7. Refinamiento DTIU</div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div>
+            <div class="owner">Angel</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">8. Pruebas Generales y QA</div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div>
+            <div class="owner">Miguel (Líder), Equipo</div>
+        </div>
+
+        <div class="task-row">
+            <div class="task-name">9. Despliegue a Producción</div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div>
+            <div class="owner">Equipo Completo</div>
+        </div>
+
+        <div class="footer-note">
+            Gracias
+        </div>
+    </div>
+</body>
+</html>
