@@ -1,151 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Cronograma IO</title>
-    <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #ffffff; 
-            color: #cdd6f4; 
-            display: flex; 
-            justify-content: center; 
-            padding: 40px; 
-            margin: 0;
-        }
-        .gantt-board { 
-            background-color: #ffffff; 
-            padding: 30px 40px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            width: 1000px; 
-        }
-        h2 { 
-            color: #060606; 
-            text-align: center; 
-            margin-bottom: 30px; 
-            font-size: 24px;
-        }
-        .header, .task-row { 
-            display: grid; 
-            grid-template-columns: 220px repeat(9, 1fr) 200px; 
-            gap: 8px; 
-            align-items: center; 
-        }
-        .header { 
-            font-weight: bold; 
-            color: #0a0a0a; 
-            border-bottom: 2px solid #0a0a0a; 
-            padding-bottom: 10px; 
-            margin-bottom: 15px; 
-            font-size: 13px; 
-            text-align: center; 
-        }
-        .task-row { margin-bottom: 12px; }
-        .task-name { 
-            text-align: left; 
-            font-size: 14px; 
-            font-weight: 500; 
-            color: #0a0a0a;
-        }
-        .slot { 
-            background-color: #0a0a0a; 
-            height: 26px; 
-            border-radius: 6px; 
-        }
-        .active { 
-            background-color: #a6e3a1; 
-            box-shadow: 0 0 10px rgba(166, 227, 161, 0.4); 
-        }
-        .owner { 
-            text-align: left; 
-            font-size: 12px; 
-            color: #0a0a0a; 
-            padding-left: 15px; 
-        }
-        .footer-note {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 12px;
-            color: #0a0a0a;
-        }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cronograma IO — Propuesta 2 · Diseño original</title>
+<style>
+:root{--green:#a6e3a1;--green-dark:#4b9f73;--ink:#0a0a0a;--quiet:#262626;--light:#e7e7e7}
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--ink);display:flex;justify-content:center;padding:40px;margin:0}
+.gantt-board{background:#fff;padding:30px 40px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.26);width:min(100%,1390px)}
+h2{color:#060606;text-align:center;margin:0 0 8px;font-size:24px}.subtitle{text-align:center;color:#4c4c4c;font-size:13px;margin:0 0 22px}
+.summary{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;font-size:12px}.summary span{border:1px solid #ddd;border-radius:8px;padding:8px 12px}.summary strong{font-size:13px}
+.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0 18px;font-size:12px}.legend{display:flex;flex-wrap:wrap;gap:15px;align-items:center}.swatch{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;margin-right:4px;background:var(--green)}.swatch.joint{background:var(--green-dark)}.swatch.blank{background:var(--quiet)}
+select,button{font:inherit;color:#111;padding:8px 10px;border:1px solid #999;border-radius:6px;background:#fff}button{cursor:pointer}button:hover{background:#f0f0f0}
+.calendar-scroll{overflow-x:auto}.calendar{min-width:1130px}.header,.task-row{display:grid;grid-template-columns:250px repeat(9,minmax(58px,1fr)) 160px;gap:8px;align-items:center}.header{font-weight:bold;color:#0a0a0a;border-bottom:2px solid #0a0a0a;padding-bottom:10px;margin-bottom:15px;font-size:13px;text-align:center}.header small{display:block;font-size:10px;font-weight:normal;margin-top:3px}
+.phase-name{font-size:13px;font-weight:700;padding:15px 0 9px;border-bottom:1px solid #b7b7b7;margin:12px 0 10px;color:#181818}
+.task-row{margin-bottom:12px;min-height:33px}.task-name{text-align:left;font-size:13px;font-weight:500;color:#0a0a0a}.deliverable{font-size:10px;font-weight:400;color:#575757;margin-top:4px;line-height:1.35}.slot{background-color:#262626;height:26px;border-radius:6px}.slot.active{background-color:var(--green);box-shadow:0 0 9px rgba(166,227,161,.4)}.slot.joint{background:var(--green-dark);box-shadow:0 0 9px rgba(75,159,115,.3)}.owner{text-align:left;font-size:12px;color:#0a0a0a;padding-left:10px}.owner small{display:block;color:#555;font-size:10px;margin-top:4px}
+.footer-note{margin-top:24px;text-align:center;font-size:12px;color:#0a0a0a}.method-note{font-size:12px;color:#444;border-top:1px solid #ddd;padding-top:12px;margin-top:16px;line-height:1.6}.method-note p{margin:5px 0}.empty{color:#666;font-size:12px}
+@media(max-width:700px){body{padding:10px}.gantt-board{padding:19px 15px}h2{font-size:20px}}
+@page{size:A3 landscape;margin:10mm}
+@media print{body{padding:0}.gantt-board{border:0;box-shadow:none;padding:0;width:100%}.toolbar{display:none}.calendar{min-width:0}.header,.task-row{grid-template-columns:205px repeat(9,minmax(40px,1fr)) 115px;gap:3px}.header{font-size:9px;margin-bottom:8px}.header small{font-size:8px}.task-row{margin-bottom:5px;break-inside:avoid}.task-name{font-size:10px}.deliverable{font-size:8px}.owner{font-size:9px;padding-left:4px}.owner small{font-size:7px}.slot{height:18px;print-color-adjust:exact;-webkit-print-color-adjust:exact}.phase-name{break-after:avoid;font-size:11px;padding:9px 0 5px;margin:6px 0 5px}.summary{margin-bottom:10px}}
+</style>
 </head>
 <body>
-    <div class="gantt-board">
-        <h2>Cronograma de Desarrollo "IO" (1 Oct - 1 Dic)</h2>
-        
-        <div class="header">
-            <div style="text-align: left;">Fases del Proyecto</div>
-            <div>S1<br><span style="font-size:10px; font-weight:normal;">1-4 Oct</span></div>
-            <div>S2<br><span style="font-size:10px; font-weight:normal;">5-11 Oct</span></div>
-            <div>S3<br><span style="font-size:10px; font-weight:normal;">12-18 Oct</span></div>
-            <div>S4<br><span style="font-size:10px; font-weight:normal;">19-25 Oct</span></div>
-            <div>S5<br><span style="font-size:10px; font-weight:normal;">26 Oct-1 Nov</span></div>
-            <div>S6<br><span style="font-size:10px; font-weight:normal;">2-8 Nov</span></div>
-            <div>S7<br><span style="font-size:10px; font-weight:normal;">9-15 Nov</span></div>
-            <div>S8<br><span style="font-size:10px; font-weight:normal;">16-22 Nov</span></div>
-            <div>S9<br><span style="font-size:10px; font-weight:normal;">23-1 Dic</span></div>
-            <div style="text-align: left; padding-left: 15px;">Responsables</div>
-        </div>
+<main class="gantt-board">
+<h2>Cronograma de Desarrollo "IO" (1 Oct - 1 Dic)</h2>
+<p class="subtitle">Angular / .NET / SQL Server · 2026</p>
+<div class="summary"><span><strong>Líder:</strong> Emiliano</span><span><strong>Equipo:</strong> Ángel y Emiliano</span><span><strong>9</strong> periodos de trabajo</span><span><strong id="taskCount">34</strong> actividades detalladas</span></div>
+<div class="toolbar"><div class="legend"><span><i class="swatch"></i>Actividad asignada</span><span><i class="swatch joint"></i>Trabajo conjunto</span><span><i class="swatch blank"></i>Sin actividad</span></div><div><label for="filter">Responsables: </label><select id="filter"><option value="all">Mostrar todos</option><option value="Angel">Ángel</option><option value="Emiliano">Emiliano</option><option value="both">Solo trabajo conjunto</option></select> <button type="button" onclick="window.print()">Imprimir / Guardar PDF</button></div></div>
+<div class="calendar-scroll"><div class="calendar" id="calendar">
+<div class="header"><div style="text-align:left">Fases del Proyecto</div><div>S1<small>1-4 Oct</small></div><div>S2<small>5-11 Oct</small></div><div>S3<small>12-18 Oct</small></div><div>S4<small>19-25 Oct</small></div><div>S5<small>26 Oct-1 Nov</small></div><div>S6<small>2-8 Nov</small></div><div>S7<small>9-15 Nov</small></div><div>S8<small>16-22 Nov</small></div><div>S9<small>23 Nov-1 Dic</small></div><div style="text-align:left;padding-left:10px">Responsables</div></div>
+</div></div>
+<div class="method-note"><p><strong>Seguimiento:</strong> cada tarea incluye un entregable verificable; hay actividades simultáneas y pruebas distribuidas entre fases.</p><p><strong>Alcance:</strong> el documento base describe Angular, .NET y SQL Server. La integración NFC requeriría una planificación adicional si se confirma en este alcance.</p><p><strong>Nota de calendario:</strong> S9 es un periodo extendido de nueve días para cubrir hasta el 1 de diciembre. Asignaciones propuestas para dos integrantes.</p></div>
+<div class="footer-note">Gracias</div>
+</main>
+<script>
+const phases=[
+{title:'1. Arquitectura y base de datos SQL Server',rows:[
+['Levantamiento de entidades y reglas de datos','Inventario de tablas y relaciones',[1],'both'],
+['Modelo entidad-relación, claves y restricciones','Diagrama lógico y criterios de integridad',[1],'Emiliano'],
+['Scripts SQL, índices y pruebas CRUD iniciales','BD inicial y scripts versionados',[1,2],'Angel'],
+['Estructura de API .NET y conexión SQL Server','Solución base y acceso a datos probado',[1,2],'Emiliano']]},
+{title:'2. Autenticación segura mediante JWT',rows:[
+['Modelo de usuarios y endpoint de inicio de sesión','Login, validación y tokens firmados',[2],'Emiliano'],
+['Middleware y protección de endpoints','JWT válido, vencido o alterado controlado',[2,3],'Emiliano'],
+['Pantalla Angular, servicio, interceptor y guards','Inicio/cierre de sesión y rutas protegidas',[2,3],'Angel'],
+['Pruebas de autenticación y documentación','Casos y flujo de autenticación',[3],'both']]},
+{title:'3. Registro, alta y baja de equipos',rows:[
+['Modelo de equipo, reglas y prevención de duplicados','Campos y validaciones de negocio',[3],'Emiliano'],
+['Endpoints de alta y baja; baja lógica si aplica','API y conservación de trazabilidad',[3,4],'Emiliano'],
+['Formularios Angular, confirmación y errores','Pantallas de alta y baja integradas',[3,4],'Angel'],
+['Pruebas CRUD, duplicados y estados','Casos funcionales y registro de incidencias',[4],'both']]},
+{title:'4. Búsqueda, consulta y edición de equipos',rows:[
+['Filtros, consultas eficientes y paginación','Endpoints de búsqueda',[4],'Emiliano'],
+['Listado, filtros y estados de carga Angular','Interfaz de búsqueda y resultados',[4,5],'Angel'],
+['Formulario de edición y restricciones','Actualización autorizada de equipos',[4,5],'Angel'],
+['Pruebas de edición y consistencia de datos','Casos de búsqueda y actualización',[5],'both']]},
+{title:'5. Dashboard e indicadores en tiempo real',rows:[
+['Definición de métricas y consultas agregadas','Listado de indicadores y endpoints',[5],'Emiliano'],
+['Tarjetas, tablas y gráficos en Angular','Dashboard visual funcional',[5,6],'Angel'],
+['Actualización controlada / SignalR si procede','Mecanismo de actualización probado',[5,6],'Emiliano'],
+['Pruebas de consistencia, conexión y errores','Indicadores validados con SQL Server',[6],'both']]},
+{title:'6. Roles, permisos y registros de auditoría',rows:[
+['Matriz de roles y autorización en API','Permisos aplicados a los endpoints',[6],'Emiliano'],
+['Logs de operaciones relevantes en backend','Registros auditables sin datos sensibles',[6,7],'Emiliano'],
+['Restricciones visuales y consulta de auditoría','Controles y vista autorizada en Angular',[6,7],'Angel'],
+['Pruebas de accesos permitidos y denegados','Evidencia de controles de seguridad',[7],'both']]},
+{title:'7. Refinamiento de interfaz (DTUI)',rows:[
+['Unificación visual y componentes reutilizables','Interfaz consistente y mensajes claros',[7],'Angel'],
+['Responsive, accesibilidad y navegación','Ajustes de resolución, foco y contraste',[7,8],'Angel'],
+['Revisión cruzada y correcciones de interfaz','Lista de ajustes validados',[7,8],'both']]},
+{title:'8. Pruebas generales, integración y QA',rows:[
+['Plan y matriz de pruebas desde los requisitos','Casos de prueba y criterios de aceptación',[7,8],'Emiliano'],
+['Pruebas integrales Angular ↔ .NET ↔ SQL Server','Evidencias de flujos completos',[8],'both'],
+['Seguridad, errores, regresión y compatibilidad','Registro de defectos y correcciones',[8,9],'both'],
+['Revisión de liberación y aprobación técnica','Reporte QA y versión candidata',[8,9],'Emiliano']]},
+{title:'9. Despliegue, verificación y entrega',rows:[
+['Configuración de entorno, secretos, HTTPS y JWT','Entorno de producción preparado',[9],'Emiliano'],
+['Migraciones SQL y respaldo de base de datos','BD respaldada y scripts verificados',[9],'Emiliano'],
+['Publicación e inspección de la interfaz Angular','Frontend publicado y verificado',[9],'Angel'],
+['Smoke tests, documentación y cierre','Sistema verificado y evidencia de entrega',[9],'both']]}
+];
 
-        <div class="task-row">
-            <div class="task-name">1. Arq. y BD SQL Server</div>
-            <div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="owner">Angel, Emiliano, Miguel</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">2. Autenticación JWT</div>
-            <div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="owner">Angel, Emiliano</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">3. Alta/Baja Equipos</div>
-            <div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="owner">Angel, Miguel</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">4. Búsqueda y Edición</div>
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="owner">Angel, Emiliano</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">5. Dashboard (Real-time)</div>
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="owner">Angel, Emiliano</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">6. Roles y Logs (Auditoría)</div>
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="owner">Emiliano, Miguel</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">7. Refinamiento DTIU</div>
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div><div class="slot"></div>
-            <div class="owner">Angel</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">8. Pruebas Generales y QA</div>
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div><div class="slot"></div>
-            <div class="owner">Miguel (Líder), Equipo</div>
-        </div>
-
-        <div class="task-row">
-            <div class="task-name">9. Despliegue a Producción</div>
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"></div>
-            <div class="owner">Equipo Completo</div>
-        </div>
-
-        <div class="footer-note">
-            Gracias
-        </div>
-    </div>
-</body>
-</html>
+const safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function render(){
+ const filter=document.getElementById('filter').value, board=document.getElementById('calendar');
+ board.querySelectorAll('.phase-name,.task-row').forEach(el=>el.remove());let total=0;
+ for(const phase of phases){
+  const rows=phase.rows.filter(r=>filter==='all'||r[3]===filter||(filter!=='both'&&r[3]==='both'));
+  if(!rows.length)continue;
+  const heading=document.createElement('div');heading.className='phase-name';heading.textContent=phase.title;board.appendChild(heading);
+  for(const [name,deliverable,weeks,owner] of rows){
+   total++;const row=document.createElement('div');row.className='task-row';
+   const task=document.createElement('div');task.className='task-name';task.innerHTML=safe(name)+'<div class="deliverable">'+safe(deliverable)+'</div>';row.appendChild(task);
+   for(let w=1;w<=9;w++){const el=document.createElement('div');el.className='slot'+(weeks.includes(w)?(owner==='both'?' joint':' active'):'');el.title=weeks.includes(w)?`Semana ${w} · ${name}`:'Sin actividad';row.appendChild(el)}
+   const person=document.createElement('div');person.className='owner';person.innerHTML=owner==='both'?'Ángel y Emiliano<small>Trabajo conjunto</small>':owner==='Emiliano'?'Emiliano<small>Líder</small>':'Ángel';row.appendChild(person);board.appendChild(row);
+  }
+ }
+ document.getElementById('taskCount').textContent=total;
+}
+document.getElementById('filter').addEventListener('change',render);render();
+</script></body></html>
